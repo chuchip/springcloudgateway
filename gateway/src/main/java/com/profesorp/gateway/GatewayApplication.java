@@ -41,14 +41,15 @@ public class GatewayApplication {
 				.uri("http://localhost:999"))
 			.build();
 	}
-	@Bean
-	public GlobalFilter customFilter() {
-	    return new CustomGlobalFilter();
-	}
 	@RequestMapping("/fallback")
 	public Mono<String> fallback() {
 		return Mono.just("Alfo fue mal. Respondido de fallback");
 	}
+	@Bean
+	public GlobalFilter customFilter() {
+	    return new CustomGlobalFilter();
+	}
+	
 }
 class CustomGlobalFilter implements GlobalFilter, Ordered {
 	Logger log = LoggerFactory.getLogger(this.getClass());
