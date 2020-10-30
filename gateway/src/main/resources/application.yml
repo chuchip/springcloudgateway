@@ -1,0 +1,36 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone:  http://localhost:8761/eureka  
+                 
+spring:
+  application:
+    name:  gateway  
+  cloud:
+    gateway:
+      default-filters:
+      - AddResponseHeader=X-Gateway, true
+      routes:
+      - id: simple
+        uri: http://localhost:8000/
+        predicates:
+        - Path=/simple/{segment}
+        filters:
+        - SetPath=/dummy/{segment}
+      - id: eureka-client
+        uri: lb://eureka-client1
+        predicates:
+        - Path=/eureka/**
+        filters:
+        - RewritePath=/eureka/(?<segment>.*), /$\{segment}
+      - id: host_route 
+        uri: http://localhost:8000
+        filters:
+        - AddRequestHeader=X-Request-PROFE, Hola
+        - PrefixPath=/dummy
+        - RemoveRequestHeader=X-Request-Foo
+        predicates:
+        - Host=www.dummy.com,www.simple.com  
+        
+        
+
