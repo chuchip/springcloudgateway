@@ -11,12 +11,12 @@ import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.Ordered;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerWebExchange;
 
 import reactor.core.publisher.Mono;
-import reactor.netty.http.client.HttpClient.UriConfiguration;
 
 @SpringBootApplication
 @EnableEurekaClient
@@ -43,14 +43,11 @@ public class GatewayApplication {
 	}
 	@RequestMapping("/fallback")
 	public Mono<String> fallback() {
-		return Mono.just("Alfo fue mal. Respondido de fallback");
-	}
-	@Bean
-	public GlobalFilter customFilter() {
-	    return new CustomGlobalFilter();
+		return Mono.just("Algo fue mal. Respondido de fallback");
 	}
 	
 }
+@Component
 class CustomGlobalFilter implements GlobalFilter, Ordered {
 	Logger log = LoggerFactory.getLogger(this.getClass());
     @Override
